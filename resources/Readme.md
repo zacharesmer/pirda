@@ -1,6 +1,8 @@
 # Resources
 An index of specifications is archived here, but unfortunately many of the links do not work: https://web.archive.org/web/20010410042908/http://www.irda.org/standards/specifications.asp
 
+There is also a more current version of that page, but some links do not work on it either: https://www.irda.org/standards/specifications
+
 The archived sitemap is a good place to start to explore the website: https://web.archive.org/web/20010409084616/http://www.irda.org/sitemap.asp
 
 Some of the PDFs I've found are from that archive, and others were from google dorking and searching archive.org based on titles from that list. I was able to find approximately what I think I need for this project, but please send a PR if you have more to add!
