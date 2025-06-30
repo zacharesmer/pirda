@@ -1,0 +1,2 @@
+IRDA_TX_PIN = 26
+IRDA_RX_PIN = 27
