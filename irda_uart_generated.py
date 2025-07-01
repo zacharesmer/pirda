@@ -64,20 +64,29 @@ def irda_uart_rx_9600():
 # irda_uart_rx_115200 #
 # ------------------- #
 
-@rp2.asm_pio(autopush=True, push_thresh=32)
+@rp2.asm_pio(autopush=False, in_shiftdir=rp2.PIO.SHIFT_LEFT)
 def irda_uart_rx_115200():
     wrap_target()
     label("0")
     wait(0, pin, 0)                  [11] # 0
     jmp(pin, "0")                         # 1
-    in_(null, 1)                     [8]  # 2
-    label("3")
-    set(x, 9)                             # 3
+    nop()                            [8]  # 2
+    set(y, 7)                             # 3
     label("4")
-    jmp(x_dec, "4")                  [7]  # 4
-    nop()                            [4]  # 5
-    in_(pins, 1)                     [12] # 6
-    jmp("3")                              # 7
+    set(x, 9)                             # 4
+    label("5")
+    jmp(x_dec, "5")                  [7]  # 5
+    nop()                            [4]  # 6
+    in_(pins, 1)                     [12] # 7
+    jmp(y_dec, "4")                       # 8
+    set(x, 9)                             # 9
+    label("10")
+    jmp(x_dec, "10")                 [7]  # 10
+    nop()                            [4]  # 11
+    jmp(pin, "14")                        # 12
+    jmp("0")                              # 13
+    label("14")
+    push(block)                           # 14
     wrap()
 
 

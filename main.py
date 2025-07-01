@@ -2,7 +2,7 @@ from irda import IrDA_UART
 import board_config
 import time
 
-irda_uart = IrDA_UART(board_config.IRDA_TX_PIN, board_config.IRDA_RX_PIN, 9600)
+irda_uart = IrDA_UART(board_config.IRDA_TX_PIN, board_config.IRDA_RX_PIN, 115200)
 
 
 ## Run this loop on the transmitting board

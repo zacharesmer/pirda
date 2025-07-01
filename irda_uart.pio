@@ -84,22 +84,32 @@ idle:
 ; *************************
 .program irda_uart_rx_115200
 
-.lang_opt python autopush = True
-.lang_opt python push_thresh = 32
+.lang_opt python autopush = False
+.lang_opt python in_shiftdir = rp2.PIO.SHIFT_LEFT
 
 .wrap_target
 idle:
-    wait 0 pin 0                 [11]       ; delay 1 us, slightly less than min pulse width
+    wait 0 pin 0                [11]        ; delay 1 us, slightly less than min pulse width
     jmp pin idle                            ; if it's high again, the pulse was less than the minimum. ignore it.
-    in null 1                    [8]        ; otherwise it was a 0. Delay a bit only this time so we're reading the pin in the middle of the 
+    nop                         [8]         ; otherwise it's the start bit. Delay a bit only this time so we're reading the pin in the middle of the 
                                             ; pulse in the future
+    set y 7                                 ; counter for the data bits, use it as part of the extra delay
     ; One bit should take up 100 cycles, which is too big to store directly in a register
     ; Instead, we'll loop around some nops that add up to 100
-    wait_for_next_bit:      
+    data_bits:      
         set x 9                             ; 15th cycle from the beginning
         spin:                           
             jmp x-- spin        [7]         ; 10 loops * 8 cycles per loop = 80 more cycles
         nop                     [4]         ; bam the loop got us to 95 now we're at 100    
         in pins 1               [12]        ; start of next bit
-        jmp wait_for_next_bit               ; wait enough cycles to make up for time spent before the loop, not including the extra delay
+        jmp y-- data_bits               ; wait enough cycles to make up for time spent before the loop, not including the extra delay
+    ; stop bit
+    set x 9                             ; 15th cycle from the beginning
+        spin2:                           
+            jmp x-- spin2        [7]         ; 10 loops * 8 cycles per loop = 80 more cycles
+        nop                      [4]         ; bam the loop got us to 95 now we're at 100    
+        jmp pin valid_stop
+            jmp idle
+        valid_stop:
+            push
 .wrap
