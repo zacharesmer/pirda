@@ -21,8 +21,7 @@ class IrDA_UART:
         set_drive_strength_high(tx_pin_num)
         rx_pin = Pin(rx_pin_num, Pin.IN, pull=Pin.PULL_UP)
 
-        # these programs have to go on separate state machines or they don't work right
-        # not 100% sure why but that generally makes sense I guess
+        # these programs have to go on separate state machines
         self.tx_machine = rp2.StateMachine(
             1, irda_uart_generated.irda_uart_tx, freq=16 * baud_rate, set_base=tx_pin
         )
